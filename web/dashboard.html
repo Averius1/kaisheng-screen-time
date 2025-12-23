@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaiSheng - Screen Time Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Particle Background Canvas -->
+    <canvas id="particle-canvas" class="particle-canvas"></canvas>
+    
+    <!-- Cursor Glow Effect -->
+    <div id="cursor-glow" class="cursor-glow"></div>
+    
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header" data-reveal>
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                    </svg>
+                </div>
+                <h1 class="app-title">KaiSheng</h1>
+            </div>
+            
+            <div class="header-controls">
+                <button class="control-btn" id="theme-toggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z"/>
+                    </svg>
+                </button>
+                <button class="control-btn pulse" id="settings-btn" aria-label="Settings">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.14,12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36,2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74,8.87c-.12.21-.08.47.12.61l2.03,1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03,1.58c-.18.14-.23.41-.12.61l1.92,3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36,2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12,15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="dashboard-grid">
+            <!-- Motion Tracking Card -->
+            <section class="feature-card motion-card" data-reveal>
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 12.03 4 17v5c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-5c0-4.97-1.21-9.49-3.58-13.36-.03.12-.03.24-.03.36 0 2.06-1.56 3.73-3.63 3.73S7.07 8.27 7.07 6.2c0-2.15.74-4.8.74-4.8M12 4.2C10.06 4.2 8.5 5.76 8.5 7.7c0 1.93 1.56 3.5 3.5 3.5s3.5-1.57 3.5-3.5c0-1.94-1.56-3.5-3.5-3.5m-7 15.5v-1c0-1.65 1.35-3 3-3s3 1.35 3 3v1h-6m2-6.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+                        </svg>
+                        Motion Tracking
+                    </h2>
+                    <div class="status-indicator" id="motion-status" data-active="false">
+                        <span class="status-dot"></span>
+                        <span class="status-text">No Motion</span>
+                    </div>
+                </div>
+                
+                <div class="card-content">
+                    <div class="motion-visualizer">
+                        <div class="motion-circle" id="motion-circle">
+                            <div class="motion-waves">
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                            </div>
+                        </div>
+                        <div class="motion-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Steps</span>
+                                <span class="stat-value" id="step-count">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Duration</span>
+                                <span class="stat-value" id="walk-duration">0m 0s</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="motion-controls">
+                        <button class="btn btn-primary" id="motion-toggle">
+                            <span class="btn-icon">▶</span>
+                            <span class="btn-text">Start Tracking</span>
+                        </button>
+                        <div class="motion-threshold">
+                            <label for="step-threshold">Step Threshold</label>
+                            <input type="range" id="step-threshold" min="1" max="20" value="5" 
+                                   class="slider" aria-label="Step threshold slider">
+                            <span class="threshold-value">5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="motion-warning" id="motion-warning" hidden>
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                        <span>Social media scrolling restricted while walking</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- App Time Limits Card -->
+            <section class="feature-card limits-card" data-reveal>
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        App Time Limits
+                    </h2>
+                    <span class="limits-summary" id="limits-summary">0 active limits</span>
+                </div>
+                
+                <div class="card-content">
+                    <div class="add-limit-form">
+                        <select id="app-selector" class="app-select">
+                            <option value="">Select an app...</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Twitter">Twitter</option>
+                            <option value="YouTube">YouTube</option>
+                            <option value="Netflix">Netflix</option>
+                            <option value="Spotify">Spotify</option>
+                            <option value="Snapchat">Snapchat</option>
+                            <option value="Reddit">Reddit</option>
+                        </select>
+                        
+                        <div class="time-input-group">
+                            <input type="number" id="limit-hours" min="0" max="23" value="1" 
+                                   class="time-input" aria-label="Hours">
+                            <span class="time-label">h</span>
+                            <input type="number" id="limit-minutes" min="0" max="59" value="0" 
+                                   class="time-input" aria-label="Minutes">
+                            <span class="time-label">m</span>
+                        </div>
+                        
+                        <button class="btn btn-secondary" id="add-limit-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                            Add Limit
+                        </button>
+                    </div>
+                    
+                    <div class="limits-list" id="limits-list">
+                        <!-- Dynamic content -->
+                    </div>
+                    
+                    <div class="usage-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Today's Total</span>
+                            <span class="stat-value" id="daily-total">0h 0m</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Most Used App</span>
+                            <span class="stat-value" id="most-used">None</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scheduled Downtime Card -->
+            <section class="feature-card downtime-card" data-reveal>
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                        Scheduled Downtime
+                    </h2>
+                    <div class="status-indicator" id="downtime-status" data-active="false">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Inactive</span>
+                    </div>
+                </div>
+                
+                <div class="card-content">
+                    <div class="schedule-creator">
+                        <input type="text" id="schedule-name" placeholder="Schedule name..." 
+                               class="schedule-input" aria-label="Schedule name">
+                        
+                        <div class="time-picker-group">
+                            <div class="time-input-wrapper">
+                                <label for="downtime-start">Start</label>
+                                <input type="time" id="downtime-start" 
+                                       class="time-picker" value="21:00">
+                            </div>
+                            <div class="time-input-wrapper">
+                                <label for="downtime-end">End</label>
+                                <input type="time" id="downtime-end" 
+                                       class="time-picker" value="07:00">
+                            </div>
+                        </div>
+                        
+                        <div class="days-selector">
+                            <label class="day-checkbox">
+                                <input type="checkbox" value="Mon">
+                                <span class="day-label">M</span>
+                            </label>
+                            <label class="day-checkbox">
+                                <input type="checkbox" value="Tue">
+                                <span class="day-label">T</span>
+                            </label>
+                            <label class="day-checkbox">
+                                <input type="checkbox" value="Wed">
+                                <span class="day-label">W</span>
+                            </label>
+                            <label class="day-checkbox">
+                                <input type="checkbox" value="Thu">
+                                <span class="day-label">T</span>
+                            </label>
+                            <label class="day-checkbox">
+                                <input type="checkbox" value="Fri">
+                                <span class="day-label">F</span>
+                            </label>
+                            <label class="day-checkbox">
+                                <input type="checkbox" value="Sat">
+                                <span class="day-label">S</span>
+                            </label>
+                            <label class="day-checkbox">
+                                <input type="checkbox" value="Sun">
+                                <span class="day-label">S</span>
+                            </label>
+                        </div>
+                        
+                        <div class="schedule-options">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="block-device">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Block entire device</span>
+                            </label>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="add-schedule-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                            Add Schedule
+                        </button>
+                    </div>
+                    
+                    <div class="schedules-list" id="schedules-list">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions Card -->
+            <section class="feature-card actions-card" data-reveal>
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg class="card-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Quick Actions
+                    </h2>
+                </div>
+                
+                <div class="card-content">
+                    <div class="quick-actions-grid">
+                        <button class="action-btn" id="emergency-override">
+                            <div class="action-icon pulse">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                            <span class="action-label">Emergency Override</span>
+                        </button>
+                        
+                        <button class="action-btn" id="pause-all">
+                            <div class="action-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                                </svg>
+                            </div>
+                            <span class="action-label">Pause All</span>
+                        </button>
+                        
+                        <button class="action-btn" id="reset-day">
+                            <div class="action-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                                </svg>
+                            </div>
+                            <span class="action-label">Reset Day</span>
+                        </button>
+                        
+                        <button class="action-btn" id="view-stats">
+                            <div class="action-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                                </svg>
+                            </div>
+                            <span class="action-label">View Stats</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+        </div>
+        <p class="loading-text">Initializing KaiSheng...</p>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
