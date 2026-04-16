@@ -1,0 +1,6 @@
+/* 
+ * App-specific styles.
+ * Prefer Tailwind classes directly. Use this file only for
+ * styles that cannot be expressed with utility classes.
+ * Global base styles live in index.css.
+ */
